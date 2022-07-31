@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <root release="3.0" version="3">
-	<announcement text="Power Up v1.0\rby Ryan Hagelstrom 2022"  icon="PowerUp" font="emotefont"/>
+	<announcement text="Power Up v1.1\rby Ryan Hagelstrom 2022\rtype: /powerup"  icon="PowerUp" font="emotefont"/>
 	<properties>
     	<loadorder>102</loadorder>
 		<name>Feature: Power Up</name>
-		<version>1.0</version>
+		<version>1.1</version>
 		<author>Ryan Hagelstrom</author>
 		<description>Show what extensions have been updated since last campaign</description>
 	</properties>

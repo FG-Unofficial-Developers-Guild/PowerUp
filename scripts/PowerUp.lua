@@ -41,7 +41,7 @@ function powerUp()
 				Comm.addChatMessage(sMessage);
 				bNoUpdates = false;
 			elseif sVersion ~= sOldVersion then
-				sMessage.text = sName .. " Old: " .. sOldVersion .. " New: ".. sVersion;
+				sMessage.text = sName .. " Previous: " .. sOldVersion .. " Current: ".. sVersion;
 				Comm.addChatMessage(sMessage);
 				bNoUpdates = false;
 			end
