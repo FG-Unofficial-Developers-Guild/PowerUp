@@ -3,9 +3,10 @@
 --		Copyright © 2022
 --		This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 --		https://creativecommons.org/licenses/by-sa/4.0/
---		luacheck: globals getPowerUp setPowerUp powerUpMan powerUpLoad purgeOldData setupData
+--		luacheck: globals onDesktopInit purgeOldData setupData powerUpLoad powerUpMan getPowerUp setPowerUp
 
 local tExtensions = {}
+local onDesktopInit_old = nil
 
 function onInit()
 	Comm.registerSlashHandler("powerup", powerUpLoad)
@@ -25,12 +26,18 @@ function onInit()
 		tExtensions[tInfo.name] = tInfo.version
 	end
 	if OptionsManager.isOption("PU_AUTO_RUN", "enabled") then
-		powerUpLoad()
+		onDesktopInit_old = Interface.onDesktopInit
+		Interface.onDesktopInit = onDesktopInit
 	end
 end
 
 function onClose()
 	setPowerUp(DB.findNode("PowerUp.onload"))
+end
+
+function onDesktopInit(...)
+	onDesktopInit_old(...)
+	powerUpLoad()
 end
 
 -- if using old (<= v1.1) data structure, restructure it
