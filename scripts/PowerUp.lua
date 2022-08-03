@@ -3,7 +3,7 @@
 --		Copyright © 2022
 --		This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 --		https://creativecommons.org/licenses/by-sa/4.0/
---		luacheck: globals onDesktopInit purgeOldData setupData powerUpLoad powerUpMan getPowerUp setPowerUp
+--		luacheck: globals onDesktopInit onDesktopClose purgeOldData setupData powerUpLoad powerUpMan getPowerUp setPowerUp
 
 local tExtensions = {}
 
@@ -27,9 +27,10 @@ function onInit()
 	if OptionsManager.isOption("PU_AUTO_RUN", "enabled") then
 		Interface.onDesktopInit = powerUpLoad
 	end
+	Interface.onDesktopClose = onDesktopClose
 end
 
-function onClose()
+function onDesktopClose()
 	setPowerUp(DB.findNode("PowerUp.onload"))
 end
 
@@ -80,9 +81,10 @@ end
 
 -- check for new or modified extension versions
 function getPowerUp(nodeDB)
-	local rMessage = { font = "systemfont", icon = "PowerUpChat" }
+	local rMessage = { font = "systemfont", icon = "PowerUpChat", bNoUpdates = true }
 	if nodeDB then
 		for sName, sVersion in pairs(tExtensions) do
+			sName = sName:gsub("%(.*%)", "")
 			local sOldVersion = DB.getValue(nodeDB, UtilityManager.encodeXML(sName):gsub("%s","_"):gsub(":",""), "")
 			if sOldVersion == "" then
 				rMessage.text = sName .. " new to campaign"
@@ -106,6 +108,7 @@ function setPowerUp(nodeDB)
 	if Session.IsHost then
 		if nodeDB then
 			for sName, sVersion in pairs(tExtensions) do
+				sName = sName:gsub("%(.*%)", "")
 				DB.setValue(nodeDB, UtilityManager.encodeXML(sName):gsub("%s","_"):gsub(":",""), "string", sVersion)
 			end
 		end
