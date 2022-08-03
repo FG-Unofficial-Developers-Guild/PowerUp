@@ -2,5 +2,5 @@
 
 <root>
 	<icon name="PowerUp" file="graphics/icons/PowerUp.png"></icon>
-	<icon name="PowerUpChat" file="graphics/icons/PowerUpChat.png"></icon>
+	<icon name="PowerUpChat" file="graphics/icons/PowerUp.png"></icon>
 </root>

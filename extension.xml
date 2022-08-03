@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <root release="3.0" version="3">
-	<announcement text="Power Up v1.1\rby Ryan Hagelstrom 2022\rtype: /powerup"  icon="PowerUp" font="emotefont"/>
+	<announcement text="https://www.fantasygrounds.com/forums/showthread.php?74616-Power-Up\rPower Up v1.2\rby Ryan Hagelstrom 2022\rtype: /powerup" icon="PowerUp" font="emotefont"/>
 	<properties>
     	<loadorder>102</loadorder>
 		<name>Feature: Power Up</name>
-		<version>1.1</version>
+		<version>1.2</version>
 		<author>Ryan Hagelstrom</author>
 		<description>Show what extensions have been updated since last campaign</description>
 	</properties>
 	<base>
-    		<script name="PowerUp" file="scripts/PowerUp.lua" />
-			<includefile source="graphics/graphics.xml" />
+		<script name="PowerUp" file="scripts/PowerUp.lua" />
+		<includefile source="graphics/graphics.xml" />
+    	<string name="option_label_PU_AUTO_RUN">Chat: Post New Extension Versions On Load</string>
   	</base>
 </root>
