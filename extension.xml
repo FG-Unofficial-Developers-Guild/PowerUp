@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <root release="3.0" version="3">
-	<announcement text="https://www.fantasygrounds.com/forums/showthread.php?74616-Power-Up\rPower Up v1.2 by Ryan Hagelstrom\rContribution: bmos 2022\rtype: /powerup /powerupman" icon="PowerUp" font="emotefont"/>
+	<announcement text="https://www.fantasygrounds.com/forums/showthread.php?74616-Power-Up\rPower Up v1.3 by Ryan Hagelstrom\rContribution: bmos 2022\rtype: /powerup /powerupman" icon="PowerUp" font="emotefont"/>
 	<properties>
-    	<loadorder>102</loadorder>
+    	<loadorder>10</loadorder>
 		<name>Feature: Power Up</name>
-		<version>1.2</version>
+		<version>1.3</version>
 		<author>Ryan Hagelstrom</author>
 		<description>Show what extensions have been updated since last campaign</description>
 	</properties>

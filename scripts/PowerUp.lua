@@ -3,7 +3,7 @@
 --		Copyright © 2022
 --		This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 --		https://creativecommons.org/licenses/by-sa/4.0/
---		luacheck: globals onDesktopInit onDesktopClose purgeOldData setupData powerUpLoad powerUpMan getPowerUp setPowerUp
+--		luacheck: globals onDesktopInit onDesktopClose purgeOldData setupData powerUpLoad powerUpMan getPowerUp setPowerUp registerExtension
 
 local tExtensions = {}
 
@@ -63,6 +63,17 @@ function setupData()
 		setPowerUp(nodePowerUp.getChild("manual"))
 	end
 	return nodePowerUp
+end
+
+--Used to allow extensions to register themself with whatever version string they want
+-- since FG only accepts X.Y format
+function registerExtension(sExtension, sVersion)
+	local nRet = 1
+	if type(sExtension) == "string" and type(sVersion) == "string" and sExtension ~= "" and sVersion ~= "" then
+		tExtensions[sExtension] = sVersion
+		nRet = 0
+	end
+	return nRet
 end
 
 -- check for updates since last load
