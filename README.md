@@ -1,7 +1,7 @@
 # Power Up
 
-**Current Version:** 1.3
-**Updated::** 08/06/22
+**Current Version:** 1.4
+**Updated::** 08/28/22
 
 Power Up is Fantasy Grounds extension that allows a user to see the name of extensions that have been updated since the last time the campaign was loaded.
 

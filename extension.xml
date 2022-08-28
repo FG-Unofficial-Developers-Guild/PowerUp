@@ -4,7 +4,7 @@
 	<properties>
     	<loadorder>10</loadorder>
 		<name>Feature: Power Up</name>
-		<version>1.3</version>
+		<version>1.4</version>
 		<author>Ryan Hagelstrom</author>
 		<description>Show what extensions have been updated since last campaign</description>
 	</properties>

@@ -76,6 +76,11 @@ function registerExtension(sExtension, sVersion)
 	return nRet
 end
 
+--Get the extension table
+function getExtensions()
+	return tExtensions
+end
+
 -- check for updates since last load
 -- called from /powerup command or automatically on load (when option is enabled)
 function powerUpLoad()
