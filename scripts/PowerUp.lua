@@ -3,7 +3,8 @@
 --		Copyright © 2022
 --		This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 --		https://creativecommons.org/licenses/by-sa/4.0/
---		luacheck: globals onDesktopInit onDesktopClose purgeOldData setupData powerUpLoad powerUpMan getPowerUp setPowerUp registerExtension
+--		luacheck: globals onDesktopInit onDesktopClose purgeOldData setupData powerUpLoad versionMessages saveExtensionData
+--		luacheck: globals powerUpMan getPowerUp setPowerUp registerExtension getExtensions versionChangeNotification
 
 local tExtensions = {}
 
@@ -20,10 +21,7 @@ function onInit()
 		purgeOldData()
 		setupData()
 	end
-	for _,sName in pairs(Extension.getExtensions()) do
-		local tInfo = Extension.getExtensionInfo(sName)
-		tExtensions[tInfo.name] = tInfo.version
-	end
+	saveExtensionData()
 	if OptionsManager.isOption("PU_AUTO_RUN", "enabled") then
 		Interface.onDesktopInit = powerUpLoad
 	end
@@ -65,12 +63,21 @@ function setupData()
 	return nodePowerUp
 end
 
+function saveExtensionData()
+	for _,sName in pairs(Extension.getExtensions()) do
+		local tInfo = Extension.getExtensionInfo(sName)
+		registerExtension(tInfo.name, tInfo.version)
+	end
+end
+
 --Used to allow extensions to register themself with whatever version string they want
 -- since FG only accepts X.Y format
-function registerExtension(sExtension, sVersion)
+function registerExtension(sExtension, sVersion, tMessages)
 	local nRet = 1
 	if type(sExtension) == "string" and type(sVersion) == "string" and sExtension ~= "" and sVersion ~= "" then
-		tExtensions[sExtension] = sVersion
+		if not tExtensions[sExtension] then tExtensions[sExtension] = {}; end
+		tExtensions[sExtension]['version'] = sVersion
+		tExtensions[sExtension]['messages'] = tMessages
 		nRet = 0
 	end
 	return nRet
@@ -79,6 +86,61 @@ end
 --Get the extension table
 function getExtensions()
 	return tExtensions
+end
+
+-- check for new or modified extension versions and post chat messages
+function versionChangeNotification(nodeDB, rMessage, sName, tData)
+	sName = sName:gsub("%(.*%)", "")
+	local sOldVersion = DB.getValue(nodeDB, UtilityManager.encodeXML(sName):gsub("%s","_"):gsub(":",""), "")
+	if sOldVersion == "" then
+		rMessage.text = sName .. " new to campaign"
+		rMessage.bNoUpdates = false
+		Comm.addChatMessage(rMessage)
+	elseif tData['version'] ~= sOldVersion then
+		rMessage.text = sName .. " Previous: " .. sOldVersion .. " Current: ".. tData['version']
+		rMessage.bNoUpdates = false
+		Comm.addChatMessage(rMessage)
+	end
+end
+
+-- post update messages with links when found
+function versionMessages(rMessage, tMessages)
+	if not tMessages then return; end
+	for _, msg in pairs(tMessages) do
+		if msg['message'] then rMessage.text = rMessage.text .. msg['message']; end
+		if rMessage.text ~= "" and msg['link'] then rMessage.text = rMessage.text .. '\n'; end
+		if msg['link'] then rMessage.text = rMessage.text .. msg['link']; end
+		if rMessage.text ~= "" then Comm.addChatMessage(rMessage); end
+	end
+end
+
+-- loop through extensions and call messaging functions
+function getPowerUp(nodeDB)
+	local rMessage = { font = "systemfont", icon = "PowerUpChat", bNoUpdates = true }
+	if nodeDB then
+		for sName, tData in pairs(tExtensions) do
+			versionChangeNotification(nodeDB, rMessage, sName, tData)
+
+			rMessage.text = ""
+			versionMessages(rMessage, tData['messages'])
+		end
+	end
+	if rMessage.bNoUpdates then
+		rMessage.text = "No extension updates detected"
+		Comm.addChatMessage(rMessage)
+	end
+end
+
+-- save list of current extension versions to database
+function setPowerUp(nodeDB)
+	if Session.IsHost then
+		if nodeDB then
+			for sName, tData in pairs(tExtensions) do
+				sName = sName:gsub("%(.*%)", "")
+				DB.setValue(nodeDB, UtilityManager.encodeXML(sName):gsub("%s","_"):gsub(":",""), "string", tData['version'])
+			end
+		end
+	end
 end
 
 -- check for updates since last load
@@ -93,40 +155,4 @@ function powerUpMan()
 	local nodePUMan = DB.findNode("PowerUp.manual")
 	getPowerUp(nodePUMan)
 	setPowerUp(nodePUMan)
-end
-
--- check for new or modified extension versions
-function getPowerUp(nodeDB)
-	local rMessage = { font = "systemfont", icon = "PowerUpChat", bNoUpdates = true }
-	if nodeDB then
-		for sName, sVersion in pairs(tExtensions) do
-			sName = sName:gsub("%(.*%)", "")
-			local sOldVersion = DB.getValue(nodeDB, UtilityManager.encodeXML(sName):gsub("%s","_"):gsub(":",""), "")
-			if sOldVersion == "" then
-				rMessage.text = sName .. " new to campaign"
-				rMessage.bNoUpdates = false
-				Comm.addChatMessage(rMessage)
-			elseif sVersion ~= sOldVersion then
-				rMessage.text = sName .. " Previous: " .. sOldVersion .. " Current: ".. sVersion
-				rMessage.bNoUpdates = false
-				Comm.addChatMessage(rMessage)
-			end
-		end
-	end
-	if rMessage.bNoUpdates then
-		rMessage.text = "No extension updates detected"
-		Comm.addChatMessage(rMessage)
-	end
-end
-
--- save list of current extension versions to database
-function setPowerUp(nodeDB)
-	if Session.IsHost then
-		if nodeDB then
-			for sName, sVersion in pairs(tExtensions) do
-				sName = sName:gsub("%(.*%)", "")
-				DB.setValue(nodeDB, UtilityManager.encodeXML(sName):gsub("%s","_"):gsub(":",""), "string", sVersion)
-			end
-		end
-	end
 end
