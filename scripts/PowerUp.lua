@@ -107,6 +107,7 @@ end
 function versionMessages(rMessage, tMessages)
 	if not tMessages then return; end
 	for _, msg in pairs(tMessages) do
+		rMessage.text = ""
 		if msg['message'] then rMessage.text = rMessage.text .. msg['message']; end
 		if rMessage.text ~= "" and msg['link'] then rMessage.text = rMessage.text .. '\n'; end
 		if msg['link'] then rMessage.text = rMessage.text .. msg['link']; end
@@ -121,7 +122,6 @@ function getPowerUp(nodeDB)
 		for sName, tData in pairs(tExtensions) do
 			versionChangeNotification(nodeDB, rMessage, sName, tData)
 
-			rMessage.text = ""
 			versionMessages(rMessage, tData['messages'])
 		end
 	end
