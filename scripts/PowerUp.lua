@@ -107,10 +107,14 @@ end
 function versionMessages(rMessage, tMessages)
 	if not tMessages then return; end
 	for _, msg in pairs(tMessages) do
+		rMessage.icon = "PowerUpChat"
+		if msg['icon'] then rMessage.icon = msg['icon']; end
+
 		rMessage.text = ""
 		if msg['message'] then rMessage.text = rMessage.text .. msg['message']; end
 		if rMessage.text ~= "" and msg['link'] then rMessage.text = rMessage.text .. '\n'; end
 		if msg['link'] then rMessage.text = rMessage.text .. msg['link']; end
+
 		if rMessage.text ~= "" then Comm.addChatMessage(rMessage); end
 	end
 end
