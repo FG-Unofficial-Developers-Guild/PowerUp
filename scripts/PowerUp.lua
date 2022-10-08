@@ -130,6 +130,7 @@ function getPowerUp(nodeDB)
 		end
 	end
 	if rMessage.bNoUpdates then
+		rMessage.icon = "PowerUpChat"
 		rMessage.text = "No extension updates detected"
 		Comm.addChatMessage(rMessage)
 	end
