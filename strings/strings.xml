@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root>
+	    <string name="option_PowerUp">Power Up</string>
+    	<string name="option_label_PU_AUTO_RUN">Chat: Post new extension versions on load</string>
+    	<string name="option_label_PU_NO_EXTRA">Modules: Client only load GM player modules</string>
+    	<string name="option_label_PU_FORCE_LOAD">Modules: Client force load GM player modules</string>
+</root>

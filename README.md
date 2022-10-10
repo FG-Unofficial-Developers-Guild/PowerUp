@@ -1,18 +1,21 @@
 # Power Up
 
-**Current Version:** 1.4
-**Updated::** 08/28/22
+**Current Version:** 1.5
+**Updated::** 10/10/22
 
-Power Up is Fantasy Grounds extension that allows a user to see the name of extensions that have been updated since the last time the campaign was loaded.
+Power Up is Fantasy Grounds extension that allows a user to see the name of extensions that have been updated since the last time the campaign was loaded. Power Up also allows for customization and control of the loading on player modules by the GM.
 
 The slash command <b>/powerup</b> will show which extensions have been updated since the last time the campaign was loaded.
 
 The slash command: <b>/powerupman</b> will show which extensions have been updated since the last time <b>/powerupman</b> was run on the host.
 ## Options
 
-| Name| Default | Options | Notes | 
-|---|---|---|---|---| 
-|Game: Chat: Post New Extension Versions on Load| off| off/on| When on, will post the results of /powerup to the chat window when the table is loaded (Scroll to the top).| 
+| Name| Default | Options | Notes |
+|---|---|---|---|
+|Chat: Post new extension versions on Load| off| off/on| When on, will post the results of /powerup to the chat window when the table is loaded (Scroll to the top).|
+|Modules: Client autoload player modules| off| off/on| When on, will autoload all player loadable modules on the client(s).|
+|Modules: Client only load GM player modules| off| off/on| When on, will only allow loading of player modules specified by the GMs campaign.|
+
 
 ## Extension Devs:
 
@@ -30,6 +33,25 @@ if PowerUp then
         --successfully registered
     else
         --error registering
+    end
+end
+```
+
+```
+function onInit()
+    if PowerUp then
+       PowerUp.registerExtension("My Extension Name", "My Extension Version", {
+                {
+                    ['link'] = "https://github.com/FG-Unofficial-Developers-Guild/",
+                    ['message'] = "v0.9\nAdded registration code"
+                },
+                {
+                    ['link'] = "https://fgapp.idea.informer.com/",
+                    ['message'] = "Please vote for this on the idea informer wishlist",
+                    ['icon'] = "shooting_star"
+                },
+            }
+        )
     end
 end
 ```

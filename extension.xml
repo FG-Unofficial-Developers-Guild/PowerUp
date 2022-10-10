@@ -7,11 +7,11 @@
 		<name>Feature: Power Up</name>
 		<version>1.5</version>
 		<author>Ryan Hagelstrom</author>
-		<description>Show what extensions have been updated since last campaign</description>
+		<description>Show what extensions have been updated since last campaign as well as some GM module managment of players</description>
 	</properties>
 	<base>
 		<script name="PowerUp" file="scripts/PowerUp.lua" />
+		<includefile source="strings/strings.xml" />
 		<includefile source="graphics/graphics.xml" />
-    	<string name="option_label_PU_AUTO_RUN">Chat: Post New Extension Versions On Load</string>
   	</base>
 </root>
