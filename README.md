@@ -1,7 +1,8 @@
+[![Build FG Extension](https://github.com/rhagelstrom/PowerUp/actions/workflows/create-release.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/create-release.yml) [![Luacheckrc](https://github.com/rhagelstrom/PowerUp/actions/workflows/luacheck.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/luacheck.yml)
 # Power Up
 
-**Current Version:** 1.5
-**Updated::** 10/10/22
+**Current Version:** 1.6
+**Updated::** 02/17/23
 
 Power Up is Fantasy Grounds extension that allows a user to see the name of extensions that have been updated since the last time the campaign was loaded. Power Up also allows for customization and control of the loading on player modules by the GM.
 
