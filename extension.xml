@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <root release="3.0" version="3">
-	<announcement text="https://www.fantasygrounds.com/forums/showthread.php?74616-Power-Up\rPower Up v1.6 by Ryan Hagelstrom\rContribution: bmos 2022-2023\rtype: /powerup /powerupman" icon="PowerUp" font="emotefont" />
+	<announcement text="Power Up v1.7 by Ryan Hagelstrom\rContribution: bmos 2022-2023\rtype: /powerup /powerupman" icon="PowerUp" font="emotefont" />
 	<properties>
 		<loadorder>10</loadorder>
 		<name>Feature: Power Up</name>
-		<version>1.6</version>
+		<version>1.7</version>
 		<author>Ryan Hagelstrom</author>
 		<description>Show what extensions have been updated since last campaign as well as some GM module management of players</description>
 	</properties>
@@ -12,5 +12,6 @@
 		<script name="PowerUp" file="scripts/PowerUp.lua" />
 		<includefile source="strings/strings.xml" />
 		<includefile source="graphics/graphics.xml" />
+		<includefile source="utility/utility_options.xml" />
 	</base>
 </root>

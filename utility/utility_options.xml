@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root>
+	<windowclass name="options" merge="join">
+		<sheetdata>
+			<buttoncontrol name="options_import">
+				<anchored to="title" position="righthigh" offset="70,25" width="20" height="20" />
+				<icon normal="button_import" pressed="button_import_down" />
+				<tooltip textres="options_label_PU_import" />
+				<script>
+					function onInit()
+					    if not Session.IsHost then
+					        setVisible(false);
+					    end
+					end
+
+                    function onButtonPress()
+					    local dialogOpen = Interface.dialogFileOpen(onFileSelection,  { xml = "XML Files" });
+					end
+
+                    function onFileSelection(result, path)
+					    if result == "ok" then
+					        DB.import(path, "options");
+					    end
+					end
+				</script>
+			</buttoncontrol>
+			<buttoncontrol name="options_export">
+				<anchored to="options_import" position="righthigh" offset="5,0" width="20" height="20" />
+				<icon normal="button_export" pressed="button_export_down" />
+				<tooltip textres="options_label_PU_export" />
+				<script>
+					function onInit()
+					    if not Session.IsHost then
+					        setVisible(false);
+					    end
+					end
+
+					function onButtonPress()
+					    local dialogOpen = Interface.dialogFileSave(onFileSelection,  { xml = "XML Files" });
+					end
+
+					function onFileSelection(result, path)
+					    if result == "ok" then
+					        DB.export(path, "options");
+					    end
+					end
+				</script>
+			</buttoncontrol>
+		</sheetdata>
+	</windowclass>
+</root>
