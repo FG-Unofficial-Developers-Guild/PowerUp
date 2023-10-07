@@ -2,7 +2,9 @@
 --		Copyright © 2022
 --		This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 --		https://creativecommons.org/licenses/by-sa/4.0/
-
+-- luacheck: globals onInit onClose customOnDesktopInit customOnDesktopClose customOnModuleUpdated customOnModuleAdded purgeOldData
+-- luacheck: globals setupData saveExtensionData registerExtension getExtensions versionChangeNotification versionMessages getPowerUp
+-- luacheck: globals setPowerUp powerUpMan forceLoad forceLoadModule
 local onModuleAdded = nil;
 local onModuleUpdated = nil;
 local onDesktopClose = nil;
@@ -14,12 +16,28 @@ function onInit()
     Comm.registerSlashHandler('powerupman', powerUpMan);
     onDesktopInit = Interface.onDesktopInit;
 
-    OptionsManager.registerOption2('PU_AUTO_RUN', false, 'option_PowerUp', 'option_label_PU_AUTO_RUN', 'option_entry_cycler',
-                                   {labels = 'option_val_on', values = 'enabled', baselabel = 'option_val_off', baseval = 'disabled', default = 'disabled'});
-    OptionsManager.registerOption2('PU_NO_EXTA', false, 'option_PowerUp', 'option_label_PU_NO_EXTRA', 'option_entry_cycler',
-                                   {labels = 'option_val_on', values = 'enabled', baselabel = 'option_val_off', baseval = 'disabled', default = 'disabled'});
+    OptionsManager.registerOption2('PU_AUTO_RUN', false, 'option_PowerUp', 'option_label_PU_AUTO_RUN', 'option_entry_cycler', {
+        labels = 'option_val_on',
+        values = 'enabled',
+        baselabel = 'option_val_off',
+        baseval = 'disabled',
+        default = 'disabled'
+    });
+    OptionsManager.registerOption2('PU_NO_EXTA', false, 'option_PowerUp', 'option_label_PU_NO_EXTRA', 'option_entry_cycler', {
+        labels = 'option_val_on',
+        values = 'enabled',
+        baselabel = 'option_val_off',
+        baseval = 'disabled',
+        default = 'disabled'
+    });
     OptionsManager.registerOption2('PU_FORCE_LOAD', false, 'option_PowerUp', 'option_label_PU_FORCE_LOAD', 'option_entry_cycler',
-                                   {labels = 'option_val_on', values = 'enabled', baselabel = 'option_val_off', baseval = 'disabled', default = 'disabled'});
+                                   {
+        labels = 'option_val_on',
+        values = 'enabled',
+        baselabel = 'option_val_off',
+        baseval = 'disabled',
+        default = 'disabled'
+    });
 
     onModuleAdded = Module.onModuleAdded;
     Module.onModuleAdded = customOnModuleAdded;
@@ -51,7 +69,7 @@ function onClose()
     end
     Interface.onDesktopInit = onDesktopInit;
     Interface.onDesktopClose = onDesktopClose;
-	Module.onModuleUpdated = onModuleUpdated;
+    Module.onModuleUpdated = onModuleUpdated;
 end
 
 -- check for updates since last load
