@@ -4,7 +4,7 @@
 --		https://creativecommons.org/licenses/by-sa/4.0/
 -- luacheck: globals onInit onClose customOnDesktopInit customOnDesktopClose customOnModuleUpdated customOnModuleAdded purgeOldData
 -- luacheck: globals setupData saveExtensionData registerExtension getExtensions versionChangeNotification versionMessages getPowerUp
--- luacheck: globals setPowerUp powerUpMan forceLoad forceLoadModule
+-- luacheck: globals setPowerUp powerUpMan forceLoad forceLoadModule defaultModulesDisabled
 local onModuleAdded = nil;
 local onModuleUpdated = nil;
 local onDesktopClose = nil;
@@ -38,12 +38,22 @@ function onInit()
         baseval = 'disabled',
         default = 'disabled'
     });
+    OptionsManager.registerOption2('PU_DISABLE_LOAD', false, 'option_PowerUp', 'option_label_PU_DISABLE_LOAD', 'option_entry_cycler',
+                                   {
+        labels = 'option_val_on',
+        values = 'on',
+        baselabel = 'option_val_off',
+        baseval = 'off',
+        default = 'off'
+    });
 
     onModuleAdded = Module.onModuleAdded;
     Module.onModuleAdded = customOnModuleAdded;
     if Session.IsHost then
         purgeOldData();
         setupData();
+        OptionsManager.registerCallback('PU_DISABLE_LOAD', defaultModulesDisabled);
+        defaultModulesDisabled();
     else
         onModuleUpdated = Module.onModuleUpdated;
         Module.onModuleUpdated = customOnModuleUpdated;
@@ -102,7 +112,7 @@ function customOnModuleAdded(sName)
         Module.setModulePermissions(sName, false);
     end
     if not Session.IsHost and OptionsManager.isOption('PU_FORCE_LOAD', 'enabled') then
-        forceLoadModule(sName)
+        forceLoadModule(sName);
     end
     if (onModuleAdded) then
         onModuleAdded(sName);
@@ -114,13 +124,13 @@ end
 -- for some time as users upgrade from early versions
 function purgeOldData()
     local nodePowerUp = DB.findNode('PowerUp');
-    if nodePowerUp and not nodePowerUp.getChild('onload') then
+    if nodePowerUp and not DB.getChild(nodePowerUp, 'onload') then
         local nodeTmp = DB.copyNode(nodePowerUp, DB.createNode('PowerUpTmp'));
         if nodeTmp then
-            nodePowerUp.delete();
+            DB.deleteNode(nodePowerUp);
             nodePowerUp = setupData();
-            if DB.copyNode(nodeTmp, nodePowerUp.getChild('onload')) then
-                nodeTmp.delete();
+            if DB.copyNode(nodeTmp, DB.getChild(nodePowerUp, 'onload')) then
+                DB.deleteNode(nodeTmp);
             end
         end
     end
@@ -129,13 +139,13 @@ end
 -- create data structure for saving extension version data
 function setupData()
     local nodePowerUp = DB.createNode('PowerUp');
-    if not nodePowerUp.getChild('onload') then
-        nodePowerUp.createChild('onload');
-        setPowerUp(nodePowerUp.getChild('onload'));
+    if not DB.getChild(nodePowerUp, 'onload') then
+        DB.createChild(nodePowerUp, 'onload');
+        setPowerUp(DB.getChild(nodePowerUp, 'onload'));
     end
-    if not nodePowerUp.getChild('manual') then
-        nodePowerUp.createChild('manual');
-        setPowerUp(nodePowerUp.getChild('manual'));
+    if not DB.getChild(nodePowerUp, 'manual') then
+        DB.createChild(nodePowerUp,'manual');
+        setPowerUp(DB.getChild(nodePowerUp, 'manual'));
     end
     return nodePowerUp
 end
@@ -250,14 +260,14 @@ end
 function forceLoad()
     local tModules = Module.getModules();
     for _, sName in pairs(tModules) do
-        forceLoadModule(sName)
+        forceLoadModule(sName);
     end
 end
 
 function forceLoadModule(sName)
     local tModule = Module.getModuleInfo(sName);
     if not tModule then
-        return
+        return;
     end
     if tModule.permission == 'allow' and not tModule.loaded then
         Module.activate(sName);
@@ -266,3 +276,19 @@ function forceLoadModule(sName)
     end
 end
 
+function defaultModulesDisabled()
+    if OptionsManager.isOption('PU_DISABLE_LOAD', 'on') then
+        local nodePowerUp = DB.findNode('PowerUp');
+        local tModules = Module.getModules();
+        if not DB.getChild(nodePowerUp, 'module') then
+            DB.createChild(nodePowerUp, 'module');
+        end
+
+        for _, sModule in ipairs(tModules) do
+            if not DB.getChild(nodePowerUp, 'module.' .. sModule) then
+                DB.createChild(nodePowerUp, 'module.' .. sModule);
+                Module.setModulePermissions(sModule, false);
+            end
+        end
+    end
+end
