@@ -1,14 +1,17 @@
-[![Build FG Extension](https://github.com/rhagelstrom/PowerUp/actions/workflows/create-release.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/create-release.yml) [![Luacheckrc](https://github.com/rhagelstrom/PowerUp/actions/workflows/luacheck.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/luacheck.yml)
+
 # Power Up
+
+[![Build FG Extension](https://github.com/rhagelstrom/PowerUp/actions/workflows/create-release.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/create-release.yml) [![Luacheckrc](https://github.com/rhagelstrom/PowerUp/actions/workflows/luacheck.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/luacheck.yml)
 
 **Current Version:** 1.8
 **Updated::** 12/10/23
 
 Power Up is Fantasy Grounds extension that allows a user to see the name of extensions that have been updated since the last time the campaign was loaded. Power Up also allows for customization and control of the loading on player modules by the GM.
 
-The slash command <b>/powerup</b> will show which extensions have been updated since the last time the campaign was loaded.
+The slash command **/powerup** will show which extensions have been updated since the last time the campaign was loaded.
 
-The slash command: <b>/powerupman</b> will show which extensions have been updated since the last time <b>/powerupman</b> was run on the host.
+The slash command: **/powerupman** will show which extensions have been updated since the last time **/powerupman** was run on the host.
+
 ## Options
 
 | Name| Default | Options | Notes |
@@ -18,7 +21,7 @@ The slash command: <b>/powerupman</b> will show which extensions have been updat
 |Modules: Client only load GM player modules| off| off/on| When on, will only allow loading of player modules specified by the GMs campaign.|
 |Modules: Default all modules to not player loadable| off| off/on| When on all player modules will be set to not loadable. GM must enable explicitly.|
 
-## Extension Devs:
+## Extension Devs
 
 For PowerUp to process your extension correctly you need to have a version in your extension.xml file
 
@@ -28,9 +31,9 @@ FG doesn't process micro versions so X.Y.Z the Z gets stripped off and it also d
 
 Alternatively, If you want to use your own version string you can register with PowerUp with the following code in your onInit function where "My Extension Name" and "My Extension Version" are both strings. You will need to have your own process of making sure "My Extension Version" is updated every time you update your extension. To use this method, your load order must be above 10
 
-```
+```lua
 if PowerUp then
-	if PowerUp.registerExtension("My Extension Name", "My Extension Version") == 0 then
+    if PowerUp.registerExtension("My Extension Name", "My Extension Version") == 0 then
         --successfully registered
     else
         --error registering
@@ -38,7 +41,7 @@ if PowerUp then
 end
 ```
 
-```
+```lua
 function onInit()
     if PowerUp then
        PowerUp.registerExtension("My Extension Name", "My Extension Version", {
