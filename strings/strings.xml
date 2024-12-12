@@ -5,6 +5,8 @@
 	<string name="option_label_PU_NO_EXTRA">Modules: Client only load GM player modules</string>
 	<string name="option_label_PU_FORCE_LOAD">Modules: Client force load GM player modules</string>
 	<string name="option_label_PU_DISABLE_LOAD">Modules: Default all modules to not player loadable</string>
+	<string name="option_label_PU_TOKENLOCK">Image: Default token lock</string>
+	<string name="option_label_PU_IMAGEID">Image: Share images not identified</string>
 	<string name="options_label_PU_import">Import Options</string>
 	<string name="options_label_PU_export">Export Options</string>
 </root>

@@ -3,8 +3,8 @@
 
 [![Build FG Extension](https://github.com/rhagelstrom/PowerUp/actions/workflows/create-release.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/create-release.yml) [![Luacheckrc](https://github.com/rhagelstrom/PowerUp/actions/workflows/luacheck.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/luacheck.yml) [![Markdownlint](https://github.com/rhagelstrom/PowerUp/actions/workflows/markdownlint.yml/badge.svg)](https://github.com/rhagelstrom/PowerUp/actions/workflows/markdownlint.yml)
 
-**Current Version:** 1.8
-**Updated::** 12/10/23
+**Current Version:** ~dev_version~
+**Updated:** ~date~
 
 Power Up is Fantasy Grounds extension that allows a user to see the name of extensions that have been updated since the last time the campaign was loaded. Power Up also allows for customization and control of the loading on player modules by the GM.
 
@@ -17,6 +17,8 @@ The slash command: **/powerupman** will show which extensions have been updated 
 | Name| Default | Options | Notes |
 |---|---|---|---|
 |Chat: Post new extension versions on Load| off| off/on| When on, will post the results of /powerup to the chat window when the table is loaded (Scroll to the top).|
+|Image: Default token lock| on | off/on | When off, images when shared will set the token lock to off.|
+|Image: Image: Share images not identified| off | off/on | When on, images shared will be set to not identified.|
 |Modules: Client autoload player modules| off| off/on| When on, will autoload all player loadable modules on the client(s).|
 |Modules: Client only load GM player modules| off| off/on| When on, will only allow loading of player modules specified by the GMs campaign.|
 |Modules: Default all modules to not player loadable| off| off/on| When on all player modules will be set to not loadable. GM must enable explicitly.|

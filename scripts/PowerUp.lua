@@ -1,17 +1,22 @@
---		Author: Ryan Hagelstrom
---		Copyright © 2022
---		This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
---		https://creativecommons.org/licenses/by-sa/4.0/
+--  	Author: Ryan Hagelstrom
+--      Please see the license file included with this distribution for
+--      attribution and copyright information.
+--
 -- luacheck: globals onInit onClose customOnDesktopInit customOnDesktopClose customOnModuleUpdated customOnModuleAdded purgeOldData
 -- luacheck: globals setupData saveExtensionData registerExtension getExtensions versionChangeNotification versionMessages getPowerUp
--- luacheck: globals setPowerUp powerUpMan forceLoad forceLoadModule defaultModulesDisabled
+-- luacheck: globals setPowerUp powerUpMan forceLoad forceLoadModule defaultModulesDisabled customOnDatabaseEventMenuShare
 local onModuleAdded = nil;
 local onModuleUpdated = nil;
 local onDesktopClose = nil;
 local onDesktopInit = nil;
 local tExtensions = {};
 
+local onDatabaseEventMenuShare = nil;
+
 function onInit()
+    if PowerUp then
+        PowerUp.registerExtension("PowerUp", "~dev_version~");
+    end
     Comm.registerSlashHandler('powerup', customOnDesktopInit);
     Comm.registerSlashHandler('powerupman', powerUpMan);
     onDesktopInit = Interface.onDesktopInit;
@@ -38,8 +43,22 @@ function onInit()
         baseval = 'disabled',
         default = 'disabled'
     });
-    OptionsManager.registerOption2('PU_DISABLE_LOAD', false, 'option_PowerUp', 'option_label_PU_DISABLE_LOAD', 'option_entry_cycler',
-                                   {
+    OptionsManager.registerOption2('PU_DISABLE_LOAD', false, 'option_PowerUp', 'option_label_PU_DISABLE_LOAD',
+                                   'option_entry_cycler', {
+        labels = 'option_val_on',
+        values = 'on',
+        baselabel = 'option_val_off',
+        baseval = 'off',
+        default = 'off'
+    });
+    OptionsManager.registerOption2('PU_TOKENLOCK', false, 'option_PowerUp', 'option_label_PU_TOKENLOCK', 'option_entry_cycler', {
+        labels = 'option_val_off',
+        values = 'off',
+        baselabel = 'option_val_on',
+        baseval = 'on',
+        default = 'on'
+    });
+    OptionsManager.registerOption2('PU_IMAGEID', false, 'option_PowerUp', 'option_label_PU_IMAGEID', 'option_entry_cycler', {
         labels = 'option_val_on',
         values = 'on',
         baselabel = 'option_val_off',
@@ -54,6 +73,10 @@ function onInit()
         setupData();
         OptionsManager.registerCallback('PU_DISABLE_LOAD', defaultModulesDisabled);
         defaultModulesDisabled();
+
+        onDatabaseEventMenuShare = WindowMenuManager.onDatabaseEventMenuShare;
+        WindowMenuManager.onDatabaseEventMenuShare = customOnDatabaseEventMenuShare;
+
     else
         onModuleUpdated = Module.onModuleUpdated;
         Module.onModuleUpdated = customOnModuleUpdated;
@@ -76,6 +99,7 @@ function onClose()
     if not Session.IsHost then
         OptionsManager.unregisterCallback('PU_FORCE_LOAD', forceLoad);
         Module.onModuleUpdated = onModuleUpdated;
+        WindowMenuManager.onDatabaseEventMenuShare = onDatabaseEventMenuShare;
     end
     Interface.onDesktopInit = onDesktopInit;
     Interface.onDesktopClose = onDesktopClose;
@@ -144,7 +168,7 @@ function setupData()
         setPowerUp(DB.getChild(nodePowerUp, 'onload'));
     end
     if not DB.getChild(nodePowerUp, 'manual') then
-        DB.createChild(nodePowerUp,'manual');
+        DB.createChild(nodePowerUp, 'manual');
         setPowerUp(DB.getChild(nodePowerUp, 'manual'));
     end
     return nodePowerUp
@@ -291,4 +315,31 @@ function defaultModulesDisabled()
             end
         end
     end
+end
+
+function customOnDatabaseEventMenuShare(c)
+    local wTop = UtilityManager.getTopWindow(c.window);
+    if wTop then
+        local sClass = wTop.getClass();
+        local node = wTop.getDatabaseNode();
+        local sRecordType = RecordDataManager.getRecordTypeFromDisplayClass(sClass);
+        if node and sRecordType == 'image' then
+            local nAccess = UtilityManager.getNodeAccessLevel(node);
+            if nAccess ~= 0 then
+                if OptionsManager.isOption('PU_IMAGEID', 'on') then
+                    local nodeChild = DB.getChild(node, 'isidentified');
+                    if not nodeChild then
+                        DB.setValue(node, 'isidentified', 'number', 0);
+                    end
+                end
+                if OptionsManager.isOption('PU_TOKENLOCK', 'off') then
+                    local cImage = WindowManager.callOuterWindowFunction(c.window, 'getImage');
+                    if cImage then
+                        cImage.setTokenLockState(false);
+                    end
+                end
+            end
+        end
+    end
+    onDatabaseEventMenuShare(c)
 end

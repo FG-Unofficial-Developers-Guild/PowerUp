@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 
 <root>
-	<icon name="PowerUp" file="graphics/icons/PowerUp.png"></icon>
-	<icon name="PowerUpChat" file="graphics/icons/PowerUp.png"></icon>
+	<icon name="PowerUp" file="graphics/icons/powerup.webp"></icon>
+	<icon name="PowerUpChat" file="graphics/icons/powerup.webp"></icon>
 </root>
