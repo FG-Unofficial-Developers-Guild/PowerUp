@@ -18,7 +18,7 @@ The slash command: **/powerupman** will show which extensions have been updated 
 |---|---|---|---|
 |Chat: Post new extension versions on Load| off| off/on| When on, will post the results of /powerup to the chat window when the table is loaded (Scroll to the top).|
 |Image: Default token lock| on | off/on | When off, images when shared will set the token lock to off.|
-|Image: Image: Share images not identified| off | off/on | When on, images shared will be set to not identified.|
+|Image: Share images not identified| off | off/on | When on, images shared will be set to not identified.|
 |Modules: Client autoload player modules| off| off/on| When on, will autoload all player loadable modules on the client(s).|
 |Modules: Client only load GM player modules| off| off/on| When on, will only allow loading of player modules specified by the GMs campaign.|
 |Modules: Default all modules to not player loadable| off| off/on| When on all player modules will be set to not loadable. GM must enable explicitly.|
